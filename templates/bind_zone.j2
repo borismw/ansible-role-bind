@@ -8,6 +8,7 @@
 {% set _ = _zone_data.update({'domain': item.name}) %}
 {% set _ = _zone_data.update({'mname': item.name_servers|default([])}) %}
 {% set _ = _zone_data.update({'aname': item.other_name_servers|default([])}) %}
+{% set _ = _zone_data.update({'dname': item.delegate_name_servers|default([])}) %}
 {% set _ = _zone_data.update({'mail': item.mail_servers|default([])}) %}
 {% if item.hostmaster_email is defined %}
 {% set _ = _zone_data.update({'rname': (( item.hostmaster_email )) + ('' if (item.hostmaster_email is search('\.')) else ('.' + _zone_data['domain']))}) %}
@@ -68,6 +69,9 @@ $TTL {{ _zone_data['ttl'] }}
 {% endif %}
 {% for ns in _zone_data['aname'] %}
                            IN  NS     {{ ns }}.
+{% endfor %}
+{% for ns in _zone_data['dname'] %}
+{{ ns['subdomain'] }}      IN  NS     {{ ns['name'] }}{% if not ns['name']|regex_search('\.$') %}.{% endif %}
 {% endfor %}
 
 {% for mail in _zone_data['mail'] %}

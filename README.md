@@ -76,6 +76,7 @@ The packages `python-netaddr` (required for the [`ipaddr`](https://docs.ansible.
 | `- naptr`                   | `[]`                 | A list of mappings with keys `name:`, `order:`, `pref:`, `flags:`, `service:`, `regex:` and `replacement:` specifying NAPTR records. |
 | `- networks`                | `['10.0.2']`         | A list of the networks that are part of the domain                                                                                   |
 | `- other_name_servers`      | `[]`                 | A list of the DNS servers outside of this domain.                                                                                    |
+| `- delegate_name_servers`   | `[]`                 | A list of mappings with keys `name:` and `subdomain:` to delegate specific subdomains to their name server counterpart               |
 | `- primaries`               | -                    | A list of primary DNS servers for this zone.                                                                                         |
 | `- services`                | `[]`                 | A list of services to be advertised by SRV records                                                                                   |
 | `- text`                    | `[]`                 | A list of mappings with keys `name:` and `text:`, specifying TXT records. `text:` can be a list or string.                           |
@@ -120,6 +121,9 @@ bind_zones:
     name_servers:
       - pub01.mydomain.com.
       - pub02.mydomain.com.
+    delegate_name_servers:
+      - name: pub03.mydomain.com.
+        subdomain: example
     hosts:
       - name: pub01
         ip: 192.0.2.1
@@ -131,6 +135,11 @@ bind_zones:
         ipv6: 2001:db8::2
         aliases:
           - ns2
+      - name: pub03
+        ip: 192.0.2.5
+        ipv6: 2001:db8::5
+        aliases:
+          - ns3
       - name: '@'                # Enables "http://mydomain.com/"
         ip:
           - 192.0.2.3            # Multiple IP addresses for a single host
