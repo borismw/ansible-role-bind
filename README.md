@@ -42,6 +42,7 @@ The packages `python-netaddr` (required for the [`ipaddr`](https://docs.ansible.
 | `bind_dns64_clients`        | `['any']`            | A list of clients which the DNS64 function applies to (can be any ACL)                                                               |
 | `bind_dnssec_enable`        | `true`               | If `true`, DNSSEC is enabled                                                                                                         |
 | `bind_dnssec_validation`    | `true`               | If `true`, DNSSEC validation is enabled                                                                                              |
+| `bind_validate_except`      | `[]`                 | A list of domains, Bind should not use DNSSEC chain of trust                                                                         |
 | `bind_extra_include_files`  | `[]`                 | A list of custom config files to be included from the main config file                                                               |
 | `bind_forward_only`         | `false`              | If `true`, BIND is set up as a caching name server                                                                                   |
 | `bind_forwarders`           | `[]`                 | A list of name servers to forward DNS requests to.                                                                                   |

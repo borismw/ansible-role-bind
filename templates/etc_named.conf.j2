@@ -40,8 +40,14 @@ options {
 
   rrset-order { order {{ bind_rrset_order }}; };
 
-{% if bind_dnssec_enable %}  dnssec-enable {{ bind_dnssec_enable }};{% endif %}
-  dnssec-validation {{ bind_dnssec_validation }};
+{% if bind_dnssec_enable %}  dnssec-enable {{ bind_dnssec_enable }};{% endif %}
+  dnssec-validation {{ bind_dnssec_validation }};
+{% if bind_validate_except|length > 0 %}  validate-except { 
+{% for validate_exception in bind_validate_except %}
+    {{ validate_exception }};
+{% endfor %}
+  };
+{% endif %}
 
   /* Path to ISC DLV key */
   bindkeys-file "{{ bind_bindkeys_file }}";
