@@ -55,11 +55,17 @@
     bind_ver_installed: "{{ ansible_facts.packages[bind_package]
        | map(attribute='version') | first
        | regex_search('^(.*:)*([0-9]+\\.[0-9]+)\\.(.*)$', '\\2') | first }}"
+  when: "bind_package in ansible_facts.packages"
 
 - name: Discard bind_dnssec_enable for bind >= 9.16
   set_fact:
     bind_dnssec_enable: false
   when: bind_ver_installed is version('9.16', '>=')
+
+- name: Discard bind_validate_except for bind <= 9.11
+  set_fact:
+    bind_validate_except: []
+  when: bind_ver_installed is version('9.11', '<=')
 
 - name: Ensure runtime directories referenced in config exist
   file:
