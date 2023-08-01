@@ -1,7 +1,10 @@
 # Distro specific variables for FreeBSD
 ---
 
-bind_package: bind911
+bind_package: 
+  - bind911
+  - bind916
+  - bind918
 
 bind_packages:
   - py39-netaddr
