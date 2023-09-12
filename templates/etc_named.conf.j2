@@ -183,14 +183,14 @@ zone "{{ ('.'.join(network.replace(network+'.','').split('.')[::-1])) }}.in-addr
 {% endif %}
 };
 {% endif %}
-{{ reverse.append( network ) -}}
+{{ reverse.append( network ) }}
 {% endfor %}
 {% endif %}
 {% endif %}
 {% if bind_zone.ipv6_networks is defined %}
 {% if bind_zone.create_reverse_zones is not defined or bind_zone.create_reverse_zones %}
 {% for network in bind_zone.ipv6_networks %}
-
+{% if network not in reverse %}
 zone "{{ (network | ipaddr('revdns'))[-(9+(network|regex_replace('^.*/','')|int)//2):] }}" IN {
 {% if _type == 'primary' %}
   type master;
@@ -214,6 +214,8 @@ zone "{{ (network | ipaddr('revdns'))[-(9+(network|regex_replace('^.*/','')|int)
   forwarders { {{ bind_zone.forwarders|join('; ') }}; };
 {% endif %}
 };
+{% endif %}
+{{ reverse.append( network )}}
 {% endfor %}
 {% endif %}
 {% endif %}
