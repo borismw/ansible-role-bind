@@ -7,8 +7,8 @@ bind_package:
   - bind918
 
 bind_packages:
-  - py39-netaddr
-  - py39-dnspython
+  - py311-netaddr
+  - py311-dnspython
   - bind918
 
 bind_service: named
