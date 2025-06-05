@@ -36,20 +36,8 @@ jobs:
     strategy:
       matrix:
         distro:
-          - image: "quay.io/centos/centos"
-            tag: "stream8"
-          - image: "quay.io/centos/centos"
-            tag: "centos7"
-          - image: "debian"
-            tag: "11"
-          - image: "debian"
-            tag: "10"
           - image: "ubuntu"
-            tag: "20.04"
-          - image: "ubuntu"
-            tag: "18.04"
-          - image: "ubuntu"
-            tag: "16.04"
+            tag: "22.04"
 
     steps:
       - name: Check out the codebase.
