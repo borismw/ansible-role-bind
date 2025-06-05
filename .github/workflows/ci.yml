@@ -7,44 +7,66 @@ name: CI
       - master
 
 jobs:
-
   test:
     name: Molecule
     runs-on: ubuntu-latest
     strategy:
       matrix:
         distro:
-          - centos7
-          - centos8
-          - debian8
-          - debian9
-          - debian10
-          - ubuntu1604
-          - ubuntu1804
-          - ubuntu2004
+          - image: "ubuntu"
+            tag: "24.04"
 
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Python 3
-        uses: actions/setup-python@v2
+      - name: Set up Python 3.
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
-      - name: Install test dependencies.
-        run: pip3 install ansible molecule molecule-docker yamllint ansible-lint docker netaddr dnspython
+      - name: Setup venv
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+
+      - name: Upgrade pip
+        run: |
+          python3 -m pip install --constraint=.github/workflows/constraints.txt pip
+          python3 -m pip --version
+
+      - name: Install test dependencies
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          retry_wait_seconds: 20
+          max_attempts: 3
+          command: |
+            if [ -z "${{ matrix.ansible_version_minimum }}" ]
+            then
+              python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
+            else
+              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }}.* ansible==${{ matrix.ansible_package_version_minimum }} \
+              -r .github/workflows/requirements.txt
+            fi
+
+            molecule --version
+            docker --version
+            ansible-galaxy install --verbose -r requirements.yml
+            ansible-galaxy collection list
 
       - name: Run Molecule Primary/Secondary/Forwarder tests
         run: molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+          image: ${{ matrix.distro.image }}
+          tag: ${{ matrix.distro.tag }}
 
       - name: Run Molecule Shared Inventory tests
         run: molecule test --scenario-name shared_inventory
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+          image: ${{ matrix.distro.image }}
+          tag: ${{ matrix.distro.tag }}
