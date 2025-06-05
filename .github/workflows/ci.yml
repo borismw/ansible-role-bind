@@ -6,30 +6,7 @@ name: CI
     branches:
       - master
 
-defaults:
-  run:
-    working-directory: "borismw.bind"
-
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v4
-        with:
-          path: "borismw.bind"
-      - name: Set up Python 3.
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.13.3'
-
-      - name: Install test dependencies.
-        run: pip3 install yamllint
-
-      - name: Lint code.
-        run: |
-          yamllint .
   test:
     name: Molecule
     runs-on: ubuntu-latest
@@ -37,21 +14,46 @@ jobs:
       matrix:
         distro:
           - image: "ubuntu"
-            tag: "22.04"
+            tag: "24.04"
 
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v4
-        with:
-          path: "borismw.bind"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13.3'
+          python-version: '3.11'
 
-      - name: Install test dependencies.
-        run: pip3 install ansible molecule molecule-plugins[docker] docker netaddr dnspython
+      - name: Setup venv
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+
+      - name: Upgrade pip
+        run: |
+          python3 -m pip install --constraint=.github/workflows/constraints.txt pip
+          python3 -m pip --version
+
+      - name: Install test dependencies
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          retry_wait_seconds: 20
+          max_attempts: 3
+          command: |
+            if [ -z "${{ matrix.ansible_version_minimum }}" ]
+            then
+              python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
+            else
+              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }}.* ansible==${{ matrix.ansible_package_version_minimum }} \
+              -r .github/workflows/requirements.txt
+            fi
+
+            molecule --version
+            docker --version
+            ansible-galaxy install --verbose -r requirements.yml
+            ansible-galaxy collection list
 
       - name: Run Molecule Primary/Secondary/Forwarder tests
         run: molecule test
