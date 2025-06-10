@@ -1,6 +1,8 @@
 ansible
 ansible-lint
 colorama
+dnspython
 molecule>=5.0.1
 molecule-plugins[docker]
+netaddr
 yamllint
