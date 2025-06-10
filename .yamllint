@@ -1,4 +1,10 @@
 ---
+extends: default
+
+ignore:
+  - .venv/
+  - .ansible/
+  - .github/
 
 rules:
   braces:
@@ -24,7 +30,6 @@ rules:
     min-spaces-from-content: 2
   comments-indentation:
     level: warning
-  document-end: disable
   document-start:
     level: warning
     present: true
@@ -41,17 +46,19 @@ rules:
     spaces: consistent
     indent-sequences: true
     check-multi-line-strings: false
-  key-duplicates: enable
+  key-duplicates:
+    level: error
   key-ordering: disable
   line-length:
-    max: 1000
-    level: warning
+    max: 180
+    level: error
     allow-non-breakable-words: true
     allow-non-breakable-inline-mappings: false
-  new-line-at-end-of-file: enable
+  new-line-at-end-of-file:
+    level: error
   new-lines:
     type: unix
-  trailing-spaces: enable
+  trailing-spaces:
+    level: error
   truthy:
-    allowed-values: ['true', 'false', 'yes', 'no']
-    level: warning
+    level: error
