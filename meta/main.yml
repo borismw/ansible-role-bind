@@ -14,17 +14,12 @@ galaxy_info:
         - "all"
     - name: Debian
       versions:
-        - jessie
-        - stretch
-        - buster
-    - name: FreeBSD
-      versions:
-        - "all"
+        - bullseye
+        - bookworm
     - name: Ubuntu
       versions:
-        - xenial
-        - bionic
-        - focal
+        - jammy
+        - noble
   galaxy_tags:
     - dns
     - networking
