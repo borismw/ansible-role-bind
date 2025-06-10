@@ -1,6 +1,5 @@
 # Ansible role BIND
-
-[![Actions Status](https://github.com/bertvv/ansible-role-bind/workflows/CI/badge.svg)](https://github.com/bertvv/ansible-role-bind/actions)
+[![Action Status](https://github.com/borismw/ansible-role-bind/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/borismw/ansible-role-bind/actions/workflows/ci.yml)
 
 An Ansible role for setting up ISC BIND as an **authoritative-only** DNS server for multiple domains. Specifically, the responsibilities of this role are to:
 
