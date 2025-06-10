@@ -4,6 +4,15 @@ This file contains al notable changes to the bind Ansible role.
 
 This file adheres to the guidelines of [http://keepachangelog.com/](http://keepachangelog.com/). Versioning follows [Semantic Versioning](http://semver.org/).  "GH-X" refers to the X'th issue/pull request on the Github project.
 
+## 5.1.1 - 2025-60-10
+
+Brings the CI pipeline back to life again.
+
+### Modified
+
+- Fixes ansible-lint issues
+- Scopes CI testing down to Debian 11, Debian 12, Ubuntu 22.04 and Ubuntu 24.04, drops support for CentOS
+
 ## 5.1.0 - 2020-09-17
 
 This release is long overdue. Apologies to all of you who have been waiting for this!
