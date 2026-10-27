@@ -50,8 +50,10 @@ options {
   };
 {% endif %}
 
+{%- if bind_ver_installed is version('9.19.11', '<') %}
   /* Path to ISC DLV key */
   bindkeys-file "{{ bind_bindkeys_file }}";
+{%- endif %}
 
   managed-keys-directory "{{ bind_dir }}/dynamic";
 
@@ -105,9 +107,11 @@ logging {
 {% endif %}
 };
 
+{% if bind_ver_installed is version('9.20.1', '>=') %}
 {% for file in bind_default_zone_files %}
 include "{{ file }}";
 {% endfor %}
+{% endif %}
 {% for file in bind_extra_include_files %}
 include "{{ file }}";
 {% endfor %}

@@ -14,12 +14,13 @@ galaxy_info:
         - "all"
     - name: Debian
       versions:
-        - bullseye
         - bookworm
+        - trixie
     - name: Ubuntu
       versions:
         - jammy
         - noble
+        - resolute
   galaxy_tags:
     - dns
     - networking

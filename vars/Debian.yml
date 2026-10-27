@@ -11,7 +11,7 @@ bind_packages:
   - bind9
   - bind9utils
 
-bind_service: bind9
+bind_service: named
 
 # Main config file
 bind_config: /etc/bind/named.conf
@@ -29,7 +29,7 @@ bind_auth_file: "{{ bind_conf_dir }}/{{ auth_file }}"
 bind_owner: root
 bind_group: bind
 
-bind_bindkeys_file: "/etc/named.iscdlv.key"
+bind_bindkeys_file: "/etc/bind/bind.keys"
 bind_pid_file: "/run/named/named.pid"
 bind_session_keyfile: "/run/named/session.key"
 
